@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -33,17 +34,3 @@ class HangmanController extends Controller
         return response()->json($data);
     }
 }
-Save to grepper
-Update the api.php routes file to include the new routes:
-php
-Copy code
-// routes/api.php
-
-use App\Http\Controllers\HangmanController;
-
-Route::post('/hangman/save', [HangmanController::class, 'saveGameState']);
-Route::get('/hangman/load/{gameId}', [HangmanController::class, 'loadGameState']);
-Save to grepper
-Flutter Frontend:
-Update the Flutter code to communicate with the Laravel API:
-
