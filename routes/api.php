@@ -16,4 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    
+Route::post('/hangman/save', [HangmanController::class, 'saveGameState']);
+Route::get('/hangman/load/{gameId}', [HangmanController::class, 'loadGameState']);
 });
