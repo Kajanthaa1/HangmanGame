@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('attempts', function (Blueprint $table) {
             $table->string('time');
-            
             $table->bigInteger('match_id')->unsigned()->index()->nullable();
             $table->foreign('match_id')->references('id')->on('match')->onDelete('cascade');
         });
