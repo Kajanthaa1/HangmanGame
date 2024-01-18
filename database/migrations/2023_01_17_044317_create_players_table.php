@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('matches', function (Blueprint $table) {
-            $table->string('match_name');
-            $table->bigInteger('player_id')->unsigned()->index()->nullable();
-            $table->foreign('player_id')->references('id')->on('players')->onDelete('cascade');
+        Schema::create('players', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('players');
     }
 };
