@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('players', function (Blueprint $table) {
-            $table->string('name');
-        });  
-      }
+        Schema::create('hangman_words', function (Blueprint $table) {
+            $table->id();
+            $table->string('word');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('hangman_words');
     }
 };
