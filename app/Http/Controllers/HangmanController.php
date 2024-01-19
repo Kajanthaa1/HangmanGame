@@ -86,9 +86,21 @@ class HangmanController extends Controller
 
     public function createMatch(Request $request)
     {
-        $match = Matche::create(['match_id' => Str::uuid()]);
-
-        return response()->json(['match_id' => $match->match_id]);
+        // Assuming you get match_name and player_id from the request or another source
+        $matchName = $request->input('match_name');
+        $playerId = $request->input('player_id');
+    
+        $match = Matche::create([
+            'match_id' => Str::uuid(),
+            'match_name' => $matchName,
+            'player_id' => $playerId,
+            // Add other fields as needed
+        ]);
+    
+        return response()->json(['match_id' => $match->id]);
     }
+    
+    
+    
 
 }

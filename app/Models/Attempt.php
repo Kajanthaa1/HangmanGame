@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Attempt extends Model
 {
     use HasFactory;
+        protected $table = 'attempts';
     protected $fillable = ['match_id', 'player_id', 'guessed_letter'];
 }

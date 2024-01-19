@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Matche extends Model
 {
     use HasFactory;
-   // protected $fillable = ['id'];
+    protected $table = 'matches';
+    protected $fillable = ['match_name', 'player_id'];
 }
-
-
-   
