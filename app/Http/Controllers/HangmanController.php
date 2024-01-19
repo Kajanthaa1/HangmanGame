@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use App\Models\Player;
+use Illuminate\Support\Facades\Facade;
 use App\Models\Matche;
 use App\Models\Attempt;
 use App\Models\HangmanWord;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 
 class HangmanController extends Controller
 {
@@ -74,14 +76,18 @@ class HangmanController extends Controller
         return response()->json(['message' => 'Move recorded successfully']);
     }
     public function registerPlayer(Request $request)
+    
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
+        $request->validate([
+            'name' => 'required|string',
         ]);
 
-        $player = Player::create(['name' => $data['name']]);
+        // Insert data into the players table using raw SQL query
+        DB::table('players')->insert([
+            'name' => $request->input('name'),
+        ]);
 
-        return response()->json(['player_id' => $player->id]);
+        return response()->json(['message' => 'Player created successfully'], 201);
     }
 
     public function createMatch(Request $request)
