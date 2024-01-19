@@ -17,10 +17,10 @@ use App\Http\Controllers\HangmanController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-    
-//Route::post('/hangman/save', [HangmanController::class, 'saveGameState']);
-Route::get('/hangman/load/{gameId}', [HangmanController::class, 'loadGameState']);});
+});
 
+Route::post('/hangman/save', [HangmanController::class, 'saveGameState']);
+Route::get('/hangman/load/{gameId}', [HangmanController::class, 'loadGameState']);
 Route::get('/hangman/word', [HangmanController::class, 'getWord']);
 Route::post('/hangman/check', [HangmanController::class, 'checkLetter']);
 Route::post('/hangman/register-player', [HangmanController::class, 'registerPlayer']);

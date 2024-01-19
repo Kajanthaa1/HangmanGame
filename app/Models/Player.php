@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Player extends Model
 {
     protected $table = 'players';
-
-    public $timestamps = false;
-   // use HasFactory;
-    protected $fillable = ['name','id'];
+    protected $fillable = ['name'];
 }
 
