@@ -13,6 +13,37 @@ use Illuminate\Support\Str;
 
 class HangmanController extends Controller
 {
+    public function startGame(Request $request, $matchId)
+    {
+        // Validate the request if needed
+        $data = $request->validate([
+            'player_id' => 'required|exists:players,id',
+        ]);
+
+        // Check if the match exists
+        $match = Matche::where('match_id', $matchId)->first();
+        if (!$match) {
+            return response()->json(['error' => 'Match not found'], 404);
+        }
+
+        // Retrieve a random word for the game
+        $word = HangmanWord::inRandomOrder()->first()->word;
+
+        // Save the initial game state
+        $initialGameState = [
+            'currentWord' => $word,
+            'correctGuesses' => [],
+            'incorrectGuesses' => [],
+        ];
+
+        // Use the match_id as the cache key
+        $cacheKey = 'hangman_game_' . $matchId;
+
+        // Store the initial game state in cache
+        Cache::put($cacheKey, $initialGameState, 60); // Store data in cache for 60 minutes
+
+        return response()->json(['message' => 'Game started successfully', 'match_id' => $matchId]);
+    }
     public function saveGameState(Request $request)
     {
         $data = $request->validate([
@@ -64,7 +95,6 @@ class HangmanController extends Controller
     {
         $data = $request->validate([
             'match_id' => 'required|exists:matches,id',
-            'player_id' => 'required|exists:players,id',
             'guessed_letter' => 'required|string|max:1',
             'time' => ''
         ]);
@@ -83,6 +113,28 @@ class HangmanController extends Controller
 
         return response()->json(['player_id' => $player->id]);
     }
+    
+    public function getPlayer($id)
+    {
+        // Assuming you want to retrieve a player based on the provided ID
+        $player = Player::where('id', $id)->first();
+    
+        // Check if the player exists
+        if ($player) {
+            return response()->json(['name' => $player->name]);
+        } else {
+            // Handle the case when the player is not found
+            return response()->json(['error' => 'Player not found'], 404);
+        }
+    }
+    public function Players(){
+        $players = Player::all();
+
+        return response()->json(['players' => $players]);
+    }
+    
+
+
 
     public function createMatch(Request $request)
     {

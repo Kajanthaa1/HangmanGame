@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('attempts', function (Blueprint $table) {
             $table->id();
             $table->string('time');
+            $table->char('guessed_letter');
             $table->bigInteger('match_id')->unsigned()->index()->nullable();
             $table->foreign('match_id')->references('id')->on('matches')->onDelete('cascade');
             $table->timestamps();
