@@ -24,5 +24,13 @@ Route::get('/hangman/load/{gameId}', [HangmanController::class, 'loadGameState']
 Route::get('/hangman/word', [HangmanController::class, 'getWord']);
 Route::post('/hangman/check', [HangmanController::class, 'checkLetter']);
 Route::post('/hangman/register-player', [HangmanController::class, 'registerPlayer']);
+Route::get('/hangman/player/{id}', [HangmanController::class, 'getPlayer']);
 Route::post('/hangman/create-match', [HangmanController::class, 'createMatch']);
 Route::post('/hangman/record-move', [HangmanController::class, 'recordMove']);
+Route::post('/hangman/start-game/{matchId}', [HangmanController::class, 'startGame']);
+Route::get('/hangman/players',[HangmanController::class,'Players']);
+
+Route::apiResource('Players', HangmanController::class);
+Route::apiResource('getWord', HangmanController::class);
+Route::apiResource('registerPlayer', HangmanController::class);
+

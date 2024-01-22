@@ -9,5 +9,5 @@ class Attempt extends Model
 {
     use HasFactory;
         protected $table = 'attempts';
-    protected $fillable = ['match_id', 'player_id', 'guessed_letter'];
+    protected $fillable = ['match_id','time', 'guessed_letter'];
 }
