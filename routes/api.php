@@ -33,4 +33,8 @@ Route::get('/hangman/players',[HangmanController::class,'Players']);
 Route::apiResource('Players', HangmanController::class);
 Route::apiResource('getWord', HangmanController::class);
 Route::apiResource('registerPlayer', HangmanController::class);
+Route::apiResource('recordMove', HangmanController::class);
+Route::apiResource('createMatch', HangmanController::class);
+
+
 
