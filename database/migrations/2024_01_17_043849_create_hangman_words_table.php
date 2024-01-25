@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hangman_words', function (Blueprint $table) {
             $table->id();
             $table->string('word');
-            $table->string('show');
+            $table->string('hint');
             $table->timestamps();
         });
     }

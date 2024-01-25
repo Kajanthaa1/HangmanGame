@@ -9,5 +9,5 @@ class HangmanWord extends Model
 {
     use HasFactory;
     protected $table = 'hangman_words';
-    protected $fillable = ['word'];
+    protected $fillable = ['word','hint'];
 }

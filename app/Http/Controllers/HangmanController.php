@@ -47,7 +47,7 @@ class HangmanController extends Controller
         return response()->json(['message' => 'Game started successfully', 'match_id' => $matchId]);
     }
     public function saveGameState(Request $request)
-    {
+    { 
         $data = $request->validate([
             'currentWord' => 'required|string',
             'correctGuesses' => 'required|array',
@@ -75,9 +75,15 @@ class HangmanController extends Controller
 
     public function getWord()
     {
-        $word = HangmanWord::inRandomOrder()->first()->word;
-        return response()->json(['word' => $word]);
+        $wordData = HangmanWord::inRandomOrder()->first(['word', 'hint']);
+        
+        if ($wordData) {
+            return response()->json($wordData);
+        } else {
+            return response()->json(['error' => 'No word found'], 404);
+        }
     }
+    
 
     public function checkLetter(Request $request)
     {
@@ -96,35 +102,46 @@ class HangmanController extends Controller
     public function recordMove(Request $request)
     {
         $data = $request->validate([
-            'match_id' => 'required|exists:matches,id',
+            'match_id' => 'nullable|exists:matches,id',
             'guessed_letter' => 'required|string|max:1',
-            'time' => ''
+            'word' => 'required|string|max:255',
+            // |unique:attempts,word,NULL,id,match_id,' . $request->input('match_id'),
         ]);
+    
         $data['created_at'] = Carbon::now();
-        Attempt::create($data);
-
-        return response()->json(['message' => 'Move recorded successfully']);
+        
+        $move = Attempt::create($data);
+    
+        return response()->json([
+            'message' => 'Move recorded successfully',
+            'move_id' => $move->id,
+            // 'match_id' => $move->match_id,
+        ], 201);
     }
+    
     public function registerPlayer(Request $request)
     
     {
         $request->validate([
             'name' => 'required|string',
         ]);
+        // Check if the name already exists
+        $existingPlayer = Player::where('name', $data['name'])->first();
 
-        // Insert data into the players table using raw SQL query
-        DB::table('players')->insert([
-            'name' => $request->input('name'),
-        ]);
+        if ($existingPlayer) {
+            // Name is not unique, return an error response
+            return response()->json(['error' => 'The player name is already taken. Please choose a different name.'], 422);
+        }
+        $player = Player::create(['name' => $data['name']]);
 
         return response()->json(['message' => 'Player created successfully'], 201);
     }
-    
+
     public function getPlayer($id)
     {
         // Assuming you want to retrieve a player based on the provided ID
         $player = Player::where('id', $id)->first();
-    
+
         // Check if the player exists
         if ($player) {
             return response()->json(['name' => $player->name]);
@@ -133,12 +150,13 @@ class HangmanController extends Controller
             return response()->json(['error' => 'Player not found'], 404);
         }
     }
-    public function Players(){
+    public function Players()
+    {
         $players = Player::all();
 
         return response()->json(['players' => $players]);
     }
-    
+
 
 
 
@@ -147,18 +165,14 @@ class HangmanController extends Controller
         // Assuming you get match_name and player_id from the request or another source
         $matchName = $request->input('match_name');
         $playerId = $request->input('player_id');
-    
+
         $match = Matche::create([
             'match_id' => Str::uuid(),
             'match_name' => $matchName,
             'player_id' => $playerId,
             // Add other fields as needed
         ]);
-    
+
         return response()->json(['match_id' => $match->id]);
     }
-    
-    
-    
-
 }
